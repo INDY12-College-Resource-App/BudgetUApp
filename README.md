@@ -3,17 +3,17 @@
 
 
 ## Description
-Mobile Application that allows students to
+Mobile Application focused towards students that allows for the creation of a personalized budget plan that tracks expenses from the user in multiple categories.
+
+Our application was built 
 
 
 
-## Getting Started
-
-### Dependencies
 
 
 
-### Installing
+### Components/Tools
+
 
 
 
