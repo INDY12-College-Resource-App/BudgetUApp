@@ -11,10 +11,10 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 type ResourcesScreenNavigationProp = NavigationProp<RootStackParamList, 'ResourcesHome'>;
 
-//Do the same here, and setup the stack navigator so it has all the screens.
+//Resource Screen
 const ResourcesScreen = () => {
   const navigation = useNavigation<ResourcesScreenNavigationProp>();
-
+   //Adding content to the container
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
@@ -32,7 +32,7 @@ const ResourcesScreen = () => {
     </View>
   );
 };
-  //Create the stack with the names that were set above.
+  //Created the stack with the names that were set above.
 const ResourcesStack = () => {
   return (
     <Stack.Navigator>
