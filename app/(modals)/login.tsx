@@ -66,17 +66,15 @@ const loginPage = () => {
             .then((userCredential) => {
 
                 const user = userCredential.user;
-                console.log(user.email);
+
+                if (user) {                 // waits for user authentication to firebase to finish before navgiating
+
+                    router.replace("/(tabs)/Homepage")
+                }
 
             })
             .catch(error => alert(error.message))
 
-
-    }
-
-    const moveToHome = () => {
-
-        router.replace("/(tabs)/Homepage")
 
     }
 
@@ -120,7 +118,7 @@ const loginPage = () => {
             <View style={styles.buttonContainer}>
                 <Button color="#000"
                     title="Log In"
-                    onPress={() => { handleLogin(); moveToHome(); }}
+                    onPress={() => { handleLogin() }}
                 />
 
             </View>

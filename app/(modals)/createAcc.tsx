@@ -103,7 +103,15 @@ export const Layout = () => {
             })
             .catch(error => alert(error.message))
 
-        moveToHome();
+
+        auth
+        const unsubscribe = auth.onAuthStateChanged(user => {
+            if (user) {
+                moveToHome();
+            }
+        })
+        return unsubscribe;
+       
     }
     
 

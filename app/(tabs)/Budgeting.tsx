@@ -23,13 +23,7 @@ import { PieChart } from "react-native-gifted-charts"
 
 
 
-// add color dot component to expense categories
-
-
-
-
-
-
+// add expense deletion!!
 
 
 const Budget = () => {
@@ -43,13 +37,13 @@ const Budget = () => {
     const [housingTotals, sethousingTotals] = useState<number>();
     const [otherTotals, setotherTotals] = useState<number>();
     const [budget, setbudget] = useState<number>();
-    const [avaliableCash, setavaliableCash]= useState<number>(); // might change to string so that rounds correctly? (with tofixed())
+    const [avaliableCash, setavaliableCash] = useState<number>(); // might change to string so that rounds correctly? (with tofixed())
     const [frequency, setfrequency] = useState("");
 
 
     // sets percentages for chart input
     const [budgetpercent, setbudgetpercent] = useState<number>();
-    const [foodpercent, setfoodpercent] = useState<number>(); 
+    const [foodpercent, setfoodpercent] = useState<number>();
     const [transpercent, settranspercent] = useState<number>();
     const [tuitionpercent, settuitionpercent] = useState<number>();
     const [housingpercent, sethousingpercent] = useState<number>();
@@ -75,39 +69,20 @@ const Budget = () => {
     const housingCol = collection(db, "expenses");
     const housingq = query(housingCol, where("expenseOwner", "==", auth.currentUser?.uid),
         where("exType", "==", "housingExpense"));
-   
+
     const otherCol = collection(db, "expenses");
     const otherq = query(otherCol, where("expenseOwner", "==", auth.currentUser?.uid),
         where("exType", "==", "otherExpense"));
 
 
-    
+
 
     const budgetCol = collection(db, "user");
     const budgetq = query(budgetCol, where("UserUID", "==", auth.currentUser?.uid))
 
 
 
-    const pieData = [
-
-        {
-            value: budgetpercent,
-            color: '#009FFF',
-            gradientCenterColor: '#006DFF',
-
-        },
-
-        { value: foodpercent, color: '#93FCF8', gradientCenterColor: '#3BE9DE' },
-
-        { value: transpercent, color: '#BDB2FA', gradientCenterColor: '#8F80F3' },
-
-        { value: tuitionpercent, color: '#FFA5BA', gradientCenterColor: '#FF7F97' },
-
-        { value: housingpercent, color: '#5bff33', gradientCenterColor: '#FF7F97' },
-
-        { value: otherpercent, color: '#ff9933', gradientCenterColor: '#FF7F97' },
-
-    ];
+ 
 
 
 
@@ -117,41 +92,37 @@ const Budget = () => {
         snapshot.docs.forEach((doc) => {
 
 
-           freq = doc.data().frequency
+            freq = doc.data().frequency
 
             var rounded = parseFloat(doc.data().amount).toFixed(2);
             convert = parseFloat(rounded);
-            
+
         })
         setfrequency(freq);
         setbudget(convert);
         var convertTotal = (convert - Number(foodTotals) - Number(transTotals) - Number(tuitionTotals) - Number(housingTotals) - Number(otherTotals));
-        convertTotal = Number(convertTotal.toFixed(2))
+        convertTotal = Math.round(convertTotal * 1e2) / 1e2;
         setavaliableCash(convertTotal);
 
 
-        var percentTotal = (convertTotal / 10)
-        percentTotal = Number(percentTotal.toFixed(2))
-       
-        setbudgetpercent(percentTotal);
 
 
     })
-   
 
 
-            
+
+
     useLayoutEffect(() => {
-        
-       
+
+
 
 
         onSnapshot(foodq, (snapshot) => {  //food expenses
-           
+
             var snap = 0;
             snapshot.docs.forEach((doc) => {
 
-              
+
 
                 var rounding = parseFloat(doc.data().exAmount);
 
@@ -160,19 +131,15 @@ const Budget = () => {
                 snap += rounding
 
             })
-            snap  = Math.round(snap * 1e2) / 1e2;
-            
+            snap = Math.round(snap * 1e2) / 1e2;
+
 
             setfoodTotals(snap);
 
-            var foodpercentage = (snap / 10)
-            foodpercentage = Number(foodpercentage.toFixed(2))
-            setfoodpercent(foodpercentage);
-
         })
 
-        onSnapshot(transq, (snapshot) => {  
-             
+        onSnapshot(transq, (snapshot) => {
+
             var snap = 0;
             snapshot.docs.forEach((doc) => {
 
@@ -189,13 +156,11 @@ const Budget = () => {
 
             settransTotals(snap);
 
-            var transportationpercentage = (snap / 10)
-            transportationpercentage = Number(transportationpercentage.toFixed(2))
-            settranspercent(transportationpercentage);
+           
 
         })
 
-        onSnapshot(tuitionq, (snapshot) => { 
+        onSnapshot(tuitionq, (snapshot) => {
 
             var snap = 0;
             snapshot.docs.forEach((doc) => {
@@ -214,14 +179,12 @@ const Budget = () => {
 
             settuitionTotals(snap);
 
-            var tuitionpercentage = (snap / 10)
-            tuitionpercentage = Number(tuitionpercentage.toFixed(2))
-            settuitionpercent(tuitionpercentage);
+         
 
         })
 
 
-        onSnapshot(housingq, (snapshot) => {  
+        onSnapshot(housingq, (snapshot) => {
 
             var snap = 0;
             snapshot.docs.forEach((doc) => {
@@ -240,15 +203,12 @@ const Budget = () => {
 
             sethousingTotals(snap);
 
-            var housingpercentage = (snap / 10)
-            housingpercentage = Number(housingpercentage.toFixed(2))
-            sethousingpercent(housingpercentage);
 
         })
 
 
 
-        onSnapshot(otherq, (snapshot) => {  
+        onSnapshot(otherq, (snapshot) => {
 
             var snap = 0;
             snapshot.docs.forEach((doc) => {
@@ -267,18 +227,52 @@ const Budget = () => {
 
             setotherTotals(snap);
 
-            var otherpercentage = (snap / 10)
-            otherpercentage = Number(otherpercentage.toFixed(2))
-            setotherpercent(otherpercentage);
+        
         })
 
-        
-        
 
-       
+
+
+
 
 
     }, [])
+
+
+    function percentConvert(value: any, budget: any) {
+        var conversion = 0;
+        conversion = ((value / budget) * 100);
+        var display = "";
+
+
+       display = conversion.toFixed(2);
+
+        return display;
+
+
+    }
+
+    const pieData = [
+        
+
+        {
+            value: ((Number(avaliableCash) / Number(budget) ) * 100),
+            color: '#009FFF',
+            gradientCenterColor: '#006DFF',
+
+        },
+
+        { value: ((Number(foodTotals) / Number(budget)) * 100), color: '#93FCF8', gradientCenterColor: '#3BE9DE' },
+
+        { value: ((Number(transTotals) / Number(budget)) * 100), color: '#BDB2FA', gradientCenterColor: '#8F80F3' },
+
+        { value: ((Number(tuitionTotals) / Number(budget)) * 100), color: '#FFA5BA', gradientCenterColor: '#FF7F97' },
+
+        { value: ((Number(housingTotals) / Number(budget)) * 100), color: '#5bff33', gradientCenterColor: '#FF7F97' },
+
+        { value: ((Number(otherTotals) / Number(budget)) * 100), color: '#ff9933', gradientCenterColor: '#FF7F97' },
+
+    ];
 
 
     const renderDot = (color: any) => {
@@ -295,7 +289,7 @@ const Budget = () => {
         );
     };
 
-const legendComponent = () => {
+    const legendComponent = () => {
         return (
             <>
                 <View
@@ -314,13 +308,13 @@ const legendComponent = () => {
                         }}>
 
                         {renderDot('#009FFF')}
-                        <Text style={{ color: 'black', fontWeight: 'bold' }}>Free to Spend: {budgetpercent}% </Text>
+                        <Text style={{ color: 'black', fontWeight: 'bold' }}>Free to Spend: {percentConvert(avaliableCash,budget)}% </Text>
                     </View>
 
                     <View
                         style={{ flexDirection: 'row', alignItems: 'center', width: 120 }}>
                         {renderDot('#93FCF8')}
-                        <Text style={{ color: 'black', fontWeight: 'bold' }}>Food: {foodpercent}% </Text>
+                        <Text style={{ color: 'black', fontWeight: 'bold' }}>Food: {percentConvert(foodTotals, budget)}% </Text>
                     </View>
 
                 </View>
@@ -337,14 +331,14 @@ const legendComponent = () => {
                         }}>
 
                         {renderDot('#BDB2FA')}
-                        <Text style={{ color: 'black', fontWeight: 'bold' }}>Transportation: {transpercent}%</Text>
+                        <Text style={{ color: 'black', fontWeight: 'bold' }}>Transportation: {percentConvert(transTotals, budget)}%</Text>
 
                     </View>
 
                     <View
                         style={{ flexDirection: 'row', alignItems: 'center', width: 120 }}>
                         {renderDot('#FFA5BA')}
-                        <Text style={{ color: 'black', fontWeight: 'bold' }}>Tuition: {tuitionpercent}%</Text>
+                        <Text style={{ color: 'black', fontWeight: 'bold' }}>Tuition: {percentConvert(tuitionTotals, budget)}%</Text>
                     </View>
                 </View>
 
@@ -361,66 +355,65 @@ const legendComponent = () => {
                         }}>
 
                         {renderDot('#5bff33')}
-                        <Text style={{ color: 'black', fontWeight: 'bold' }}>Housing: {housingpercent}%</Text>
+                        <Text style={{ color: 'black', fontWeight: 'bold' }}>Housing: {percentConvert(housingTotals, budget)}%</Text>
 
                     </View>
 
                     <View
                         style={{ flexDirection: 'row', alignItems: 'center', width: 120 }}>
                         {renderDot('#ff9933')}
-                        <Text style={{ color: 'black', fontWeight: 'bold' }}>Other: {otherpercent}%</Text>
+                        <Text style={{ color: 'black', fontWeight: 'bold' }}>Other: {percentConvert(otherTotals, budget)}%</Text>
                     </View>
 
                 </View>
             </>
         );
-  };
+    };
 
 
 
 
 
-
-  return (
+    return (
 
         <SafeAreaView>
             <ScrollView>
-            
-                  <View
-                      style={{
-                          margin: 20,
-                          padding: 16,
-                          borderRadius: 20,
-                      backgroundColor: '#255489',
-                      }}>
-                  <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>
-                      Budget ({frequency}) :
-                      </Text>
 
-                <View style={styles.imageContainer}> 
-                   <PieChart
-                       data={pieData}
-                       donut
-                       showGradient
-                       sectionAutoFocus
-                       radius={90}
-                       innerRadius={60}
-                       innerCircleColor={'#232B5D'}
-                       centerLabelComponent={() => {
-                           return (
-                               <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                   <Text
-                                       style={{ fontSize: 22, color: 'white', fontWeight: 'bold' }}>
-                                       ${budget}
-                                  </Text>
-                                   <Text style={{ fontSize: 14, color: 'white' }}>Budget</Text>
-                               </View>
-                           );
-                      }}
-                          />
-                      </View>
-                  {legendComponent()}
-                  
+                <View
+                    style={{
+                        margin: 20,
+                        padding: 16,
+                        borderRadius: 20,
+                        backgroundColor: '#255489',
+                    }}>
+                    <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>
+                        Budget ({frequency}) :
+                    </Text>
+
+                    <View style={styles.imageContainer}>
+                        <PieChart
+                            data={pieData}
+                            donut
+                            showGradient
+                            sectionAutoFocus
+                            radius={90}
+                            innerRadius={60}
+                            innerCircleColor={'#232B5D'}
+                            centerLabelComponent={() => {
+                                return (
+                                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                        <Text
+                                            style={{ fontSize: 22, color: 'white', fontWeight: 'bold' }}>
+                                            ${budget}
+                                        </Text>
+                                        <Text style={{ fontSize: 14, color: 'white' }}>Budget</Text>
+                                    </View>
+                                );
+                            }}
+                        />
+                    </View>
+                    {legendComponent()}
+
                 </View>
 
 
@@ -430,117 +423,117 @@ const legendComponent = () => {
                     <Text style={styles.welcomeText} > Expenses </Text>
                 </View>
 
-               
-
-
-               <View style={styles.container} >
-
-                   <Text style={styles.itemText} > Budget Remaining:  </Text>
-
-
-                   <Text style={styles.itemText2} > ${avaliableCash} </Text>
 
 
 
+                <View style={styles.container} >
 
-               </View>
+                    <Text style={styles.itemText} > Budget Remaining:  </Text>
+
+
+                    <Text style={styles.itemText2} > ${avaliableCash} </Text>
+
+
+
+
+                </View>
 
 
 
                 <Link push href="/(expensetype)/foodTab" asChild>
                     <Pressable>
-                       <View style={styles.container} >
+                        <View style={styles.container} >
 
-                           <Text style={styles.itemText} > Food </Text>
-                           
-
-                           <Text style={styles.itemText2} > ${foodTotals} </Text>
+                            <Text style={styles.itemText} > Food </Text>
 
 
-
-                          
-                </View>
+                            <Text style={styles.itemText2} > ${foodTotals} </Text>
 
 
-                </Pressable>
+
+
+                        </View>
+
+
+                    </Pressable>
                 </Link>
-               
+
 
                 <Link push href="/(expensetype)/transportationTab" asChild>
-                   <Pressable>
-                       <View style={styles.container} >
+                    <Pressable>
+                        <View style={styles.container} >
 
-                           <Text style={styles.itemText} > Transportation </Text>
-
-
-                           <Text style={styles.itemText2} > ${transTotals} </Text>
+                            <Text style={styles.itemText} > Transportation </Text>
 
 
+                            <Text style={styles.itemText2} > ${transTotals} </Text>
 
 
-                       </View>
+
+
+                        </View>
                     </Pressable>
                 </Link>
 
 
                 <Link push href="/(expensetype)/tuitionTab" asChild>
-                   <Pressable>
-                       <View style={styles.container} >
+                    <Pressable>
+                        <View style={styles.container} >
 
-                           <Text style={styles.itemText} > Tuition </Text>
-
-
-                           <Text style={styles.itemText2} > ${tuitionTotals} </Text>
+                            <Text style={styles.itemText} > Tuition </Text>
 
 
+                            <Text style={styles.itemText2} > ${tuitionTotals} </Text>
 
 
-                       </View>
-                   </Pressable>
-               </Link>
+
+
+                        </View>
+                    </Pressable>
+                </Link>
 
 
                 <Link push href="/(expensetype)/housingTab" asChild>
-                   <Pressable>
-                       <View style={styles.container} >
+                    <Pressable>
+                        <View style={styles.container} >
 
-                           <Text style={styles.itemText} > Housing </Text>
-
-
-                           <Text style={styles.itemText2} > ${housingTotals} </Text>
+                            <Text style={styles.itemText} > Housing </Text>
 
 
+                            <Text style={styles.itemText2} > ${housingTotals} </Text>
 
 
-                       </View>
-                   </Pressable>
-               </Link>
+
+
+                        </View>
+                    </Pressable>
+                </Link>
 
 
 
                 <Link push href="/(expensetype)/otherTab" asChild>
-                   <Pressable>
-                       <View style={styles.container} >
+                    <Pressable>
+                        <View style={styles.container} >
 
-                           <Text style={styles.itemText} > Other </Text>
-
-
-                           <Text style={styles.itemText2} > ${otherTotals} </Text>
+                            <Text style={styles.itemText} > Other </Text>
 
 
+                            <Text style={styles.itemText2} > ${otherTotals} </Text>
 
 
-                       </View>
-                   </Pressable>
-               </Link>
 
-                </ScrollView>
-                
-           
-            
 
-            
-            </SafeAreaView>
+                        </View>
+                    </Pressable>
+                </Link>
+
+            </ScrollView>
+
+
+
+
+
+        </SafeAreaView>
 
 
     )
@@ -556,7 +549,7 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 10,
         marginTop: 10,
-        textAlign : "left",
+        textAlign: "left",
     },
 
     imageContainer: {
@@ -567,16 +560,16 @@ const styles = StyleSheet.create({
     },
 
     welcomeText: {
-       
-       
+
+
         fontSize: 20,
         fontWeight: 'bold'
     },
     itemText: {
 
-        
+
         fontSize: 20,
-       
+
     },
     defaultText: {
         textAlign: 'center',
@@ -601,7 +594,7 @@ const styles = StyleSheet.create({
     },
     itemText2: {
 
-      
+
         fontSize: 20,
         textAlign: "right"
 

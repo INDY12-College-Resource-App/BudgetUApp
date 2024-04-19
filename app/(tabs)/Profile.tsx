@@ -16,7 +16,7 @@ import { useEffect, useState, useLayoutEffect } from 'react'
 
 
 
-//USE SAME LOGIC, ADD INFO WITH FLATLIST AND ARRAY (retrieve one user doc)
+// add reset budget functionality + profile editing + settings?
 const Profile = () => {
 
 
@@ -45,9 +45,15 @@ const Profile = () => {
         setcollege(col)
         setfrequency(freq)
         sethaslimit(limit)
+        
 
     })
 
+    const settings = () => {
+
+        router.push("/(tabs)/Homepage") // placeholder : will have proper settings function
+
+    }
 
     const handleSignOut = () => {
         auth
@@ -78,10 +84,24 @@ const Profile = () => {
 
 
             <View style={styles.container3}>
+
+                <TouchableOpacity onPress={settings} style={styles.buttonContainer}>
+                    <Text style={styles.defaultText}>Edit Profile</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={settings} style={styles.buttonContainer}>
+                    <Text style={styles.defaultText}>Reset Budget</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={settings} style={styles.buttonContainer}>
+                    <Text style={styles.defaultText}>Settings</Text>
+                </TouchableOpacity>
+
                 <TouchableOpacity onPress={handleSignOut} style={styles.buttonContainer}>
                     <Text style={styles.defaultText}>Sign Out</Text>
                 </TouchableOpacity>
             </View>
+
           
 
           

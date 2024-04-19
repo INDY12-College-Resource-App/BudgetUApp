@@ -4,9 +4,9 @@
     "\\app",
     "\\app\\(expensetype)",
     "\\app\\(modals)",
+    "\\app\\(screens)",
     "\\app\\(tabs)",
     "\\assets",
-    "\\assets\\images",
     "\\components",
     "\\constants"
   ],

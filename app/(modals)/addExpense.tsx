@@ -1,4 +1,4 @@
-//depending on expense type (from dropdown) will determine where the expense data is added to in firebase
+
 
 import { useNavigation, Link, router, useRouter } from "expo-router";
 import { StatusBar } from 'expo-status-bar';
@@ -12,7 +12,7 @@ import RadioGroup from 'react-native-radio-buttons-group';
 import { db, auth } from '@/app/index';
 import { Layout, userID } from '@/app/(modals)/createAcc';
 
-import { doc, setDoc, updateDoc, addDoc, collection, where } from "firebase/firestore";
+import { doc, setDoc, updateDoc, addDoc, collection, where, serverTimestamp } from "firebase/firestore";
 
 
 
@@ -45,7 +45,8 @@ const expense = () => {
            exType: exType,
            exAmount: exAmount,
            desc: desc,
-           expenseOwner: auth.currentUser?.uid
+           expenseOwner: auth.currentUser?.uid,
+           createdAt: serverTimestamp()
 
         });
         
