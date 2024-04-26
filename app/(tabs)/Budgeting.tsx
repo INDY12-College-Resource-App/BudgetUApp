@@ -3,27 +3,15 @@ import { Link, router } from "expo-router";
 import { Pressable, SafeAreaView } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ScrollView, FlatList } from 'react-native';
-import ImageView from '@/components/ImageView';
-import Button from '@/components/Buttons';
-
-
 const introImage = require('@/assets/intro.png');
 import { useEffect, useState, useLayoutEffect } from 'react'
-import { initializeApp } from "firebase/app";
-import { getAuth, initializeAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
-import { getAggregateFromServer, getFirestore, sum } from "firebase/firestore";
 import { db, auth, } from '@/app/index';
 import { Layout, userID } from '@/app/(modals)/createAcc';
-
 import { doc, setDoc, updateDoc, onSnapshot, getDoc } from "firebase/firestore";
 import { collection, query, where, Firestore } from "firebase/firestore";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { PieChart } from "react-native-gifted-charts"
 
-
-
-// add expense deletion!!
 
 
 const Budget = () => {
@@ -39,18 +27,6 @@ const Budget = () => {
     const [budget, setbudget] = useState<number>();
     const [avaliableCash, setavaliableCash] = useState<number>(); // might change to string so that rounds correctly? (with tofixed())
     const [frequency, setfrequency] = useState("");
-
-
-    // sets percentages for chart input
-    const [budgetpercent, setbudgetpercent] = useState<number>();
-    const [foodpercent, setfoodpercent] = useState<number>();
-    const [transpercent, settranspercent] = useState<number>();
-    const [tuitionpercent, settuitionpercent] = useState<number>();
-    const [housingpercent, sethousingpercent] = useState<number>();
-    const [otherpercent, setotherpercent] = useState<number>();
-
-
-
 
 
 

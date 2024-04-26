@@ -1,18 +1,10 @@
 
-import { Link, router } from "expo-router";
+
 import { Pressable, SafeAreaView } from "react-native";
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { ScrollView } from 'react-native-virtualized-view';
-import ImageView from '@/components/ImageView';
-import Button from '@/components/Buttons';
-
-
 const introImage = require('@/assets/intro.png');
 import { useLayoutEffect, useEffect, useState } from 'react'
-import { initializeApp } from "firebase/app";
-import { getAuth, initializeAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut,  } from "firebase/auth";
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { getFirestore, limit, orderBy } from "firebase/firestore";
 import React from 'react'
 import { db, auth, } from '@/app/index';

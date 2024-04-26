@@ -3,9 +3,6 @@ import { Link, router } from "expo-router";
 import { Pressable, TouchableOpacity } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import ImageView from '@/components/ImageView';
-import Button from '@/components/Buttons';
-import { useNavigation } from '@react-navigation/native';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 import { db, auth } from '@/app/index';
 import { Layout, userID } from '@/app/(modals)/createAcc';
@@ -85,17 +82,7 @@ const Profile = () => {
 
             <View style={styles.container3}>
 
-                <TouchableOpacity onPress={settings} style={styles.buttonContainer}>
-                    <Text style={styles.defaultText}>Edit Profile</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={settings} style={styles.buttonContainer}>
-                    <Text style={styles.defaultText}>Reset Budget</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={settings} style={styles.buttonContainer}>
-                    <Text style={styles.defaultText}>Settings</Text>
-                </TouchableOpacity>
+             
 
                 <TouchableOpacity onPress={handleSignOut} style={styles.buttonContainer}>
                     <Text style={styles.defaultText}>Sign Out</Text>
