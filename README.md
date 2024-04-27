@@ -5,7 +5,6 @@
 ## Description
 Mobile Application focused towards students that allows for the creation of a personalized budget plan that tracks expenses from the user in multiple categories.
 
-Our application was built 
 
 
 
@@ -14,27 +13,23 @@ Our application was built
 
 ### Components/Tools
 
+Visual Studio Code -
+
+React Native -
+
+Expo -
+
+Firebase Authentication / Firebase Cloudstore -
 
 
 
 ### Executing program
 
+Deployed using Expo and can
 
 ```
 
 ```
 
-## Help
 
-
-```
-
-```
-
-## Authors
-
-
-
-
-## Version History
 
