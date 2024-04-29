@@ -13,23 +13,14 @@ Mobile Application focused towards students that allows for the creation of a pe
 
 ### Components/Tools
 
-Visual Studio Code -
+Visual Studio Code 
 
-React Native -
+React Native 
 
-Expo -
+Expo 
 
-Firebase Authentication / Firebase Cloudstore -
+Firebase Authentication / Firebase Cloudstore 
 
-
-
-### Executing program
-
-Deployed using Expo and can
-
-```
-
-```
 
 
 
